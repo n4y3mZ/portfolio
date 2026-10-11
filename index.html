@@ -1,178 +1,509 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Professional portfolio website for a developer and designer."
+    />
     <title>My Portfolio</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+      :root {
+        --bg: #f5f5f3;
+        --panel: #ffffff;
+        --panel-soft: #f1f1ef;
+        --text: #161616;
+        --muted: #5f5f5f;
+        --primary: #7c6ae9;
+        --primary-strong: #5c4ce5;
+        --secondary: #d9d5ff;
+        --accent: #111827;
+        --border: rgba(17, 17, 17, 0.08);
+        --shadow: 0 12px 30px rgba(17, 17, 17, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      .container {
+        width: min(1120px, calc(100% - 2rem));
+        margin: 0 auto;
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        backdrop-filter: blur(12px);
+        background: rgba(10, 10, 10, 0.55);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 72px;
+      }
+
+      .logo {
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #fff;
+        font-size: 0.8rem;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .nav-links a {
+        color: rgba(255, 255, 255, 0.86);
+        font-size: 0.96rem;
+        transition: color 0.2s ease;
+      }
+
+      .nav-links a:hover {
+        color: #fff;
+      }
+
+      .nav-button {
+        padding: 0.72rem 1.15rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: #fff;
+        font-weight: 600;
+      }
+
+      .hero {
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background: linear-gradient(135deg, #111827 0%, #2d2d3a 35%, #5a4ecf 100%);
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at top left, rgba(255,255,255,0.22), transparent 30%);
+        pointer-events: none;
+      }
+
+      .hero-inner {
+        position: relative;
+        z-index: 1;
+        width: min(900px, calc(100% - 2rem));
+        text-align: center;
+        padding: 4rem 0;
+        color: white;
+      }
+
+      .eyebrow {
+        display: inline-block;
+        padding: 0.5rem 0.9rem;
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,0.18);
+        background: rgba(255,255,255,0.06);
+        font-size: 0.78rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.82);
+      }
+
+      h1 {
+        margin: 1.2rem 0 0.8rem;
+        font-size: clamp(2.6rem, 7vw, 5.4rem);
+        line-height: 0.95;
+        letter-spacing: -0.06em;
+      }
+
+      .hero-subtitle {
+        font-size: clamp(1.05rem, 2vw, 1.5rem);
+        max-width: 700px;
+        margin: 0 auto;
+        color: rgba(255,255,255,0.8);
+      }
+
+      .cta-row {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.95rem 1.5rem;
+        border-radius: 999px;
+        font-weight: 700;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .button:hover {
+        transform: translateY(-2px);
+      }
+
+      .button.primary {
+        background: white;
+        color: var(--accent);
+        box-shadow: 0 12px 26px rgba(0, 0, 0, 0.18);
+      }
+
+      .button.secondary {
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        background: rgba(255,255,255,0.04);
+      }
+
+      main {
+        padding: 5rem 0 2.5rem;
+      }
+
+      section {
+        margin-bottom: 4rem;
+      }
+
+      .section-heading {
+        margin-bottom: 1.6rem;
+      }
+
+      .section-heading h2 {
+        margin: 0 0 0.5rem;
+        font-size: clamp(2rem, 4vw, 2.7rem);
+        letter-spacing: -0.04em;
+      }
+
+      .section-heading p {
+        margin: 0;
+        color: var(--muted);
+        max-width: 700px;
+      }
+
+      .about-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 2rem;
+        align-items: stretch;
+      }
+
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        box-shadow: var(--shadow);
+      }
+
+      .about-card {
+        padding: 2rem;
+      }
+
+      .about-card p {
+        color: var(--muted);
+        margin: 0 0 1rem;
+        font-size: 1.04rem;
+      }
+
+      .meta-card {
+        padding: 1.5rem;
+      }
+
+      .meta-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .meta-list li {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid var(--border);
+        color: var(--muted);
+      }
+
+      .meta-list li:last-child {
+        border-bottom: none;
+      }
+
+      .meta-list strong {
+        color: var(--text);
+      }
+
+      .project-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.5rem;
+      }
+
+      .project-card {
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .project-card::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto auto 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), #9f8cff);
+      }
+
+      .project-card h3 {
+        margin-top: 1.1rem;
+        margin-bottom: 0.5rem;
+        font-size: 1.35rem;
+      }
+
+      .project-card p {
+        margin: 0 0 1rem;
+        color: var(--muted);
+      }
+
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .tag {
+        padding: 0.38rem 0.7rem;
+        background: var(--panel-soft);
+        border-radius: 999px;
+        font-size: 0.76rem;
+        color: var(--text);
+        border: 1px solid var(--border);
+      }
+
+      .contact-box {
+        padding: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .contact-box p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .contact-actions {
+        display: flex;
+        gap: 0.8rem;
+        flex-wrap: wrap;
+      }
+
+      .button-dark {
+        background: var(--accent);
+        color: white;
+      }
+
+      .button-light {
+        background: var(--panel-soft);
+        color: var(--text);
+        border: 1px solid var(--border);
+      }
+
+      .site-footer {
+        padding: 2rem 0 3rem;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      @media (max-width: 860px) {
+        .about-grid, .project-grid {
+          grid-template-columns: 1fr;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
+        .nav {
+          flex-wrap: wrap;
+          justify-content: center;
+          padding: 0.7rem 0;
+          gap: 0.75rem;
         }
 
-        nav {
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+        .nav-links {
+          justify-content: center;
+          flex-wrap: wrap;
         }
-
-        nav ul {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: #667eea;
-        }
-
-        header {
-            text-align: center;
-            color: white;
-            padding: 4rem 2rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            background-attachment: fixed;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .subtitle {
-            font-size: 1.5rem;
-            opacity: 0.9;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        section {
-            background: white;
-            margin: 2rem 0;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        h2 {
-            color: #667eea;
-            margin-bottom: 1rem;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 0.5rem;
-        }
-
-        .project {
-            background: #f8f9fa;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            border-left: 4px solid #667eea;
-            border-radius: 4px;
-        }
-
-        .project h3 {
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-
-        footer {
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 2rem;
-        }
-
-        footer a {
-            color: #667eea;
-            text-decoration: none;
-            margin: 0 1rem;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
+      }
     </style>
-</head>
-<body>
-    <nav>
-        <ul>
-            <li><a href="#about">About</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav">
+        <a href="#top" class="logo">My Portfolio</a>
+        <ul class="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#contact">Contact</a></li>
         </ul>
-    </nav>
-
-    <header>
-        <h1>Welcome to My Portfolio</h1>
-        <p class="subtitle">Full Stack Developer | Creative Problem Solver</p>
+        <a href="#contact" class="nav-button">Hire Me</a>
+      </div>
     </header>
 
-    <div class="container">
+    <section class="hero" id="top">
+      <div class="hero-inner">
+        <span class="eyebrow">Developer • Designer</span>
+        <h1>Building brands and digital experiences.</h1>
+        <p class="hero-subtitle">
+          I design and build polished web experiences that turn ideas into products people love.
+        </p>
+        <div class="cta-row">
+          <a href="#projects" class="button primary">View Projects</a>
+          <a href="#contact" class="button secondary">Get In Touch</a>
+        </div>
+      </div>
+    </section>
+
+    <main>
+      <div class="container">
         <section id="about">
+          <div class="section-heading">
             <h2>About Me</h2>
-            <p>Hi! I'm a passionate developer with experience building modern web applications. I love creating elegant solutions to complex problems and continuously learning new technologies.</p>
+            <p>
+              I’m a multidisciplinary developer focused on clean interfaces, smooth user journeys,
+              and reliable digital products.
+            </p>
+          </div>
+
+          <div class="about-grid">
+            <div class="card about-card">
+              <p>
+                I help businesses launch modern websites and apps with thoughtful design and strong
+                technical implementation. From idea validation to final polish, I care about making
+                every user interaction feel intuitive and memorable.
+              </p>
+              <p>
+                My work blends product thinking, visual design, and engineering to build experiences
+                that are both beautiful and effective.
+              </p>
+            </div>
+
+            <div class="card meta-card">
+              <ul class="meta-list">
+                <li><span>Location</span><strong>Remote</strong></li>
+                <li><span>Focus</span><strong>Web Design</strong></li>
+                <li><span>Experience</span><strong>4+ Years</strong></li>
+                <li><span>Specialty</span><strong>Frontend</strong></li>
+              </ul>
+            </div>
+          </div>
         </section>
 
         <section id="projects">
-            <h2>Projects</h2>
-            
-            <div class="project">
-                <h3>Project One</h3>
-                <p>Description of your first project and technologies used.</p>
-            </div>
+          <div class="section-heading">
+            <h2>Selected Projects</h2>
+            <p>Recent work focused on product design, performance, and user-centered development.</p>
+          </div>
 
-            <div class="project">
-                <h3>Project Two</h3>
-                <p>Description of your second project and technologies used.</p>
-            </div>
+          <div class="project-grid">
+            <article class="card project-card">
+              <span class="eyebrow" style="display:inline-block; padding:0.45rem 0.7rem; background: var(--panel-soft); color: var(--text); border-color: var(--border); letter-spacing: 0.02em; text-transform:none;">Brand Platform</span>
+              <h3>Nova Studio</h3>
+              <p>
+                Built a premium portfolio and content experience for a creative agency with a streamlined,
+                conversion-focused user flow.
+              </p>
+              <div class="tags">
+                <span class="tag">HTML</span>
+                <span class="tag">CSS</span>
+                <span class="tag">UI Design</span>
+              </div>
+            </article>
 
-            <div class="project">
-                <h3>Project Three</h3>
-                <p>Description of your third project and technologies used.</p>
-            </div>
+            <article class="card project-card">
+              <span class="eyebrow" style="display:inline-block; padding:0.45rem 0.7rem; background: var(--panel-soft); color: var(--text); border-color: var(--border); letter-spacing: 0.02em; text-transform:none;">SaaS Dashboard</span>
+              <h3>MetricFlow</h3>
+              <p>
+                Designed and launched a dashboard for analytics reporting with clear KPI tracking and fast
+                usability across devices.
+              </p>
+              <div class="tags">
+                <span class="tag">React</span>
+                <span class="tag">Charts</span>
+                <span class="tag">UX</span>
+              </div>
+            </article>
+
+            <article class="card project-card">
+              <span class="eyebrow" style="display:inline-block; padding:0.45rem 0.7rem; background: var(--panel-soft); color: var(--text); border-color: var(--border); letter-spacing: 0.02em; text-transform:none;">E-Commerce</span>
+              <h3>Luma Market</h3>
+              <p>
+                Improved a storefront experience with cleaner product discovery, mobile-first layouts,
+                and performance-focused frontend work.
+              </p>
+              <div class="tags">
+                <span class="tag">Shopify</span>
+                <span class="tag">CSS</span>
+                <span class="tag">Optimization</span>
+              </div>
+            </article>
+          </div>
         </section>
 
         <section id="contact">
-            <h2>Get In Touch</h2>
-            <p>Feel free to reach out to me on social media or send me an email.</p>
-            <p style="margin-top: 1rem;">
-                <strong>Email:</strong> your-email@example.com
-            </p>
-        </section>
-    </div>
+          <div class="card contact-box">
+            <div>
+              <div class="section-heading" style="margin-bottom:0;">
+                <h2 style="margin-bottom:0.25rem;">Let’s build something good.</h2>
+                <p>Available for freelance, contract, and product work.</p>
+              </div>
+            </div>
 
-    <footer>
-        <p>&copy; 2024 My Portfolio. Deployed with Cloudflare Workers Pages.</p>
-        <div>
-            <a href="https://github.com">GitHub</a>
-            <a href="https://linkedin.com">LinkedIn</a>
-            <a href="https://twitter.com">Twitter</a>
-        </div>
+            <div class="contact-actions">
+              <a class="button button-dark" href="mailto:your-email@example.com">Email Me</a>
+              <a class="button button-light" href="https://github.com" target="_blank" rel="noreferrer">GitHub</a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">© 2025 My Portfolio. All rights reserved.</div>
     </footer>
-</body>
+  </body>
 </html>
