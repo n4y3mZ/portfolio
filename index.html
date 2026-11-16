@@ -2,205 +2,284 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#000000">
     <title>Nayem Hasan</title>
 
-    <!-- Google Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="https://i.ibb.co.com/SDfznGLx/my-own-picture-keeping-hand-on-hand-formally.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://i.ibb.co.com/SDfznGLx/my-own-picture-keeping-hand-on-hand-formally.jpg">
+    <link rel="preload" as="image" href="https://i.ibb.co.com/SDfznGLx/my-own-picture-keeping-hand-on-hand-formally.jpg">
+
+    <script>document.documentElement.classList.add('js');</script>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-        body, html {
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+        body {
             font-family: 'Poppins', sans-serif;
-            background-color: #ffffff;
+            font-weight: 300;
+            background: #ffffff;
             color: #111111;
             overflow-x: hidden;
-            scroll-behavior: smooth;
         }
 
-        .fw-light { font-weight: 300; }
-        .text-white { color: #ffffff; }
-        .shadow-text { text-shadow: 2px 4px 12px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.5); }
-        small{      color: #7c7d7d !important;        }
-
+        /* ---------- Hero ---------- */
         .hero {
-            height: 100svh;
-            width: 100%;
-            background-image: url('https://i.ibb.co.com/SDfznGLx/my-own-picture-keeping-hand-on-hand-formally.jpg');
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
+            min-height: 100vh;
+            min-height: 100svh;
+            background: url('https://i.ibb.co.com/SDfznGLx/my-own-picture-keeping-hand-on-hand-formally.jpg') center top / cover no-repeat;
             position: relative;
+            z-index: 1;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
             align-items: center;
-            padding-bottom: 6vh;
-            z-index: 1;
-        }
-
-        @supports not (height: 100svh) {
-            .hero {
-                height: 100vh;
-            }
+            text-align: center;
+            padding: 0 24px calc(7vh + env(safe-area-inset-bottom, 0px));
+            color: #ffffff;
         }
 
         .hero::after {
             content: '';
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 50%;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
+            inset: auto 0 0 0;
+            height: 65%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.45) 55%, transparent 100%);
             z-index: -1;
+            pointer-events: none;
         }
 
-        .social-container {
-            text-align: center;
-            width: 100%;
-            padding: 0 20px;
+        .hero h1 {
+            font-weight: 300;
+            font-size: clamp(2.4rem, 9vw, 5.5rem);
+            line-height: 1.1;
+            letter-spacing: -0.5px;
+            text-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
         }
 
-        .social-buttons {
+        .country {
+            margin-top: 8px;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            opacity: 0.85;
+        }
+
+        .links {
             display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
             flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 32px;
         }
 
-        .btn {
-            display: inline-block;
-            background-color: #ffffff;
-            color: #111111;
+        .links a {
+            color: #ffffff;
             text-decoration: none;
-            padding: 12px 30px;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            border-radius: 0;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            padding: 11px 26px;
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            transition: background-color 0.2s ease, color 0.2s ease, transform 0.12s ease;
+            touch-action: manipulation;
         }
 
-        .btn:hover {
-            background-color: #ffffff;
-            color: #111111;
-            transform: none;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        .links a:active { transform: scale(0.96); }
+
+        @media (hover: hover) {
+            .links a:hover { background: #ffffff; color: #111111; }
         }
+
+        a:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
 
         .email {
-            font-size: 1rem;
-            letter-spacing: 2px;
-            opacity: 0.9;
+            margin-top: 24px;
+            color: rgba(255, 255, 255, 0.88);
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+            padding-bottom: 2px;
+            overflow-wrap: anywhere;
         }
-        
-        .section-creative {
-            background-color: #ffffff;
-            align-items: center;
-            justify-content: center;
+
+        /* ---------- Quote ---------- */
+        .quote {
+            padding: clamp(90px, 16vw, 170px) 24px;
             text-align: center;
-            padding: 100px 20px;
         }
 
-        .section-creative p {
-            font-size: clamp(2rem, 5vw, 4rem);
-            color: #111111;
-            line-height: 1.4;
-            max-width: 90vw;
+        .quote p {
+            max-width: 22ch;
+            margin-inline: auto;
+            font-size: clamp(1.8rem, 4.8vw, 3.4rem);
+            line-height: 1.35;
+            text-wrap: balance;
         }
 
-        .nh {
-            font-size: 2.5rem;
-            font-weight: bolder;
-            text-align: left;
-            padding: 20px !important;
-            display: flex;
-            align-items: flex-end !important;
-            flex-wrap: wrap;
-            gap: 10px;
-         }
+        .quote small {
+            display: block;
+            margin-top: 22px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: #6b6c6c;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #6b6c6c;
+            padding: 0 24px calc(36px + env(safe-area-inset-bottom, 0px));
+        }
+
+        /* ---------- Motion: one quick entrance, one soft reveal ---------- */
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(14px); }
+            to   { opacity: 1; transform: none; }
+        }
+
+        .hero > * {
+            animation: rise 0.5s ease-out backwards;
+            animation-delay: calc(var(--i, 0) * 70ms);
+        }
+
+        .js .reveal {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.45s ease-out, transform 0.45s ease-out;
+        }
+        .js .reveal.in-view { opacity: 1; transform: none; }
+        .js .reveal + .reveal { transition-delay: 0.08s; }
+
+        /* Snow */
+        #snow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        @media (max-width: 480px) {
+            .links { gap: 10px; margin-top: 26px; }
+            .links a { padding: 10px 20px; font-size: 0.9rem; }
+            .email { font-size: 0.88rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            .hero > * { animation: none; }
+            .js .reveal { opacity: 1; transform: none; transition: none; }
+            .links a { transition: none; }
+        }
     </style>
-<style>
-.hello-page {
-  margin: 0;
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  background: #f5f2ed;
-  color: #1b1817;
-}
-
-.hello-card {
-  max-width: 28rem;
-  margin: 1.5rem;
-  padding: 2rem;
-  border-radius: 16px;
-  background: #fff;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
-}
-
-.hello-card h1 {
-  margin-top: 0;
-  color: #c2560c;
-}
-
-.hello-card button {
-  padding: 0.6rem 1.2rem;
-  border: 0;
-  border-radius: 8px;
-  background: #fe9615;
-  color: #1b1817;
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
-}
-</style>
 </head>
 <body>
-    <section class="hero">
-        <div class="social-container">
-            <div class="social-buttons">
-                <a href="https://facebook.com/n4y3mz" target="_blank" class="btn fw-light">Facebook</a>
-                <a href="https://instagram.com/n4y3mz" target="_blank" class="btn fw-light">Instagram</a>
-                <a href="https://wa.me/@n4y3m" target="_blank" class="btn fw-light">Whatsapp*</a>
-            </div>
-            <p class="email text-white fw-light shadow-text">n4y3mz@gmail.com</p>
-        </div>
-    </section>
+    <header class="hero">
+        <h1 style="--i:0">Nayem Hasan</h1>
+        <p class="country" style="--i:1">Bangladesh</p>
+        <nav class="links" style="--i:2" aria-label="Social links">
+            <a href="https://facebook.com/n4y3mz" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://instagram.com/n4y3mz" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://wa.me/@n4y3m" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        </nav>
+        <a class="email" style="--i:3" href="mailto:n4y3mz@gmail.com">n4y3mz@gmail.com</a>
+    </header>
 
-    <section class="section-creative">
-        <p class="fw-light">With great power comes great responsibility</p>
-        <small>I would like it, if you never try to judge</small>
-    </section>
+    <main class="quote">
+        <p class="reveal">With great power comes great responsibility</p>
+        <small class="reveal">I would like it, if you never try to judge</small>
+    </main>
 
-    <section class="section-creative nh">
-        <p class="fw-light">Nayem Hasan</p>
-        <sup style="font-size: small; color: white; background: #000000; padding: 5px;">Bangladesh</sup>
-    </section>
+    <footer>&copy; 2026 Nayem Hasan</footer>
+
+    <canvas id="snow" aria-hidden="true"></canvas>
 
 <script>
-const button = document.getElementById('greet');
-const message = document.getElementById('message');
-let clicks = 0;
+(function () {
+  var items = document.querySelectorAll('.reveal');
+  if (!items.length) return;
+  if (!('IntersectionObserver' in window)) {
+    items.forEach(function (el) { el.classList.add('in-view'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  items.forEach(function (el) { io.observe(el); });
+})();
 
-if (button && message) {
-  button.addEventListener('click', () => {
-    clicks += 1;
-    message.textContent = `Hello! You clicked ${clicks} time${clicks === 1 ? '' : 's'}.`;
-    console.log('Button clicked', clicks);
-  });
-}
+/* Gentle snowfall */
+(function () {
+  var canvas = document.getElementById('snow');
+  if (!canvas || !canvas.getContext) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    canvas.style.display = 'none';
+    return;
+  }
+
+  var ctx = canvas.getContext('2d');
+  var w = 0, h = 0, flakes = [], raf = 0, last = 0, timer = 0;
+
+  function make(randomY) {
+    var r = 1.1 + Math.random() * 2.3;
+    var x = Math.random() * w;
+    return { x0: x, x: x, y: randomY ? Math.random() * h : -10, r: r,
+             v: 20 + r * 13, amp: 6 + Math.random() * 14,
+             freq: 0.6 + Math.random() * 0.9, ph: Math.random() * 6.28, t: 0 };
+  }
+
+  function resize() {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth;
+    h = window.innerHeight;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var n = Math.round(Math.min(70, Math.max(28, w / 18)));
+    while (flakes.length < n) flakes.push(make(true));
+    flakes.length = n;
+  }
+
+  function frame(now) {
+    var dt = Math.min((now - last) / 1000, 0.05);
+    last = now;
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+    ctx.strokeStyle = 'rgba(110, 135, 170, 0.45)';
+    ctx.lineWidth = 0.8;
+    for (var i = 0; i < flakes.length; i++) {
+      var f = flakes[i];
+      f.t += dt;
+      f.y += f.v * dt;
+      f.x = f.x0 + Math.sin(f.t * f.freq + f.ph) * f.amp;
+      if (f.y > h + 10) { f.y = -10; f.x0 = Math.random() * w; }
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.r, 0, 6.2832);
+      ctx.fill();
+      ctx.stroke();
+    }
+    raf = requestAnimationFrame(frame);
+  }
+
+  function start() { if (raf) return; last = performance.now(); raf = requestAnimationFrame(frame); }
+  function stop() { cancelAnimationFrame(raf); raf = 0; }
+
+  resize();
+  start();
+  window.addEventListener('resize', function () { clearTimeout(timer); timer = setTimeout(resize, 150); });
+  document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else start(); });
+})();
 </script>
 </body>
 </html>
