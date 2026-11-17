@@ -8,11 +8,21 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <!-- Font loads without blocking the first paint, so buttons show instantly even on slow networks -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap"></noscript>
     <link rel="icon" href="https://i.ibb.co.com/SDfznGLx/my-own-picture-keeping-hand-on-hand-formally.jpg">
     <link rel="preload" as="image" href="https://i.ibb.co.com/SDfznGLx/my-own-picture-keeping-hand-on-hand-formally.jpg">
 
-    <script>document.documentElement.classList.add('js');</script>
+    <script>
+    (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        var img = new Image();
+        img.onload = img.onerror = function () { d.classList.add('img-ready'); };
+        img.src = 'https://i.ibb.co.com/SDfznGLx/my-own-picture-keeping-hand-on-hand-formally.jpg';
+    })();
+    </script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -20,7 +30,7 @@
         html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
             font-weight: 300;
             background: #ffffff;
             color: #111111;
@@ -31,9 +41,10 @@
         .hero {
             min-height: 100vh;
             min-height: 100svh;
-            background: url('https://i.ibb.co.com/SDfznGLx/my-own-picture-keeping-hand-on-hand-formally.jpg') center top / cover no-repeat;
+            background: #15171a;
             position: relative;
             z-index: 1;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
@@ -43,6 +54,45 @@
             color: #ffffff;
         }
 
+        /* Skeleton: soft shimmer shown until the photo has loaded */
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -3;
+            background: linear-gradient(100deg, #15171a 20%, #262a30 50%, #15171a 80%);
+            background-size: 200% 100%;
+            animation: shimmer 1.3s linear infinite;
+            transition: opacity 0.5s ease-out;
+            pointer-events: none;
+        }
+
+        .img-ready .hero::before { opacity: 0; animation: none; }
+        html:not(.js) .hero::before { display: none; }
+
+        @keyframes shimmer {
+            from { background-position: 100% 0; }
+            to   { background-position: 0 0; }
+        }
+
+        /* Photo layer: fades in and settles once loaded */
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: -2;
+            background-image: url('https://i.ibb.co.com/SDfznGLx/my-own-picture-keeping-hand-on-hand-formally.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: 50% 0%; /* default: phones, image top at window top */
+            opacity: 0;
+            transform: scale(1.04);
+            transition: opacity 0.6s ease-out, transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+            pointer-events: none;
+        }
+
+        .img-ready .hero-bg,
+        html:not(.js) .hero-bg { opacity: 1; transform: none; }
+
         .hero::after {
             content: '';
             position: absolute;
@@ -51,6 +101,21 @@
             background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.45) 55%, transparent 100%);
             z-index: -1;
             pointer-events: none;
+        }
+
+        /* Tablets: slight shift down so the head isn't tight to the top */
+        @media (min-width: 768px) {
+            .hero-bg { background-position: 50% 10%; }
+        }
+
+        /* Desktop: image loads from its 20% mark at the window's top (0) */
+        @media (min-width: 1024px) {
+            .hero-bg { background-position: 50% 20%; }
+        }
+
+        /* Phones in landscape (short, wide screens) */
+        @media (orientation: landscape) and (max-height: 500px) {
+            .hero-bg { background-position: 50% 15%; }
         }
 
         .hero h1 {
@@ -68,12 +133,22 @@
             opacity: 0.85;
         }
 
+        /* Phones (smaller than tablets): hide name and country */
+        @media (max-width: 767px) {
+            .hero h1,
+            .hero .country { display: none; }
+        }
+
         .links {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 12px;
             margin-top: 32px;
+        }
+
+        @media (max-width: 767px) {
+            .links { margin-top: 0; }
         }
 
         .links a {
@@ -106,6 +181,104 @@
             overflow-wrap: anywhere;
         }
 
+        /* ---------- Top right: notes button ---------- */
+        .top-actions {
+            position: absolute;
+            top: calc(18px + env(safe-area-inset-top, 0px));
+            right: 18px;
+            z-index: 2;
+        }
+
+        .info-btn {
+            width: 24px;
+            height: 24px;
+            padding: 0;
+            cursor: pointer;
+            font: inherit;
+            -webkit-appearance: none;
+            appearance: none;
+            display: grid;
+            place-items: center;
+            color: #ffffff;
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            border-radius: 0;
+            background: rgba(0, 0, 0, 0.28);
+            -webkit-backdrop-filter: blur(6px);
+            backdrop-filter: blur(6px);
+            transition: background-color 0.2s ease, color 0.2s ease, transform 0.12s ease;
+            touch-action: manipulation;
+        }
+
+        .info-btn svg { width: 12px; height: 12px; }
+        .info-btn.active { background: #ffffff; color: #111111; }
+        .info-btn:focus-visible { outline: 2px solid #ffffff; outline-offset: 3px; }
+
+        /* Floating note */
+        .note-card {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            width: min(280px, calc(100vw - 36px));
+            padding: 16px 18px 18px;
+            text-align: left;
+            color: #ffffff;
+            background: rgba(15, 17, 20, 0.82);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+            transform-origin: top right;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-6px) scale(0.98);
+            transition: opacity 0.18s ease-out, transform 0.18s ease-out, visibility 0s linear 0.18s;
+        }
+
+        .note-card.open {
+            opacity: 1;
+            visibility: visible;
+            transform: none;
+            transition-delay: 0s;
+        }
+
+        .note-title { font-size: 0.95rem; font-weight: 400; margin-bottom: 10px; }
+
+        .note-card ul { list-style: none; }
+
+        .note-card li {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.85);
+            padding: 7px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.14);
+        }
+
+        .note-link {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 9px 20px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.88rem;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        @media (hover: hover) {
+            .note-link:hover { background: #ffffff; color: #111111; }
+        }
+        .info-btn:active { transform: scale(0.94); }
+
+        @media (hover: hover) {
+            .info-btn:hover { background: #ffffff; color: #111111; }
+        }
+
+        @media (min-width: 1024px) {
+            .top-actions { top: 26px; right: 32px; }
+        }
+
         /* ---------- Quote ---------- */
         .quote {
             padding: clamp(90px, 16vw, 170px) 24px;
@@ -135,15 +308,15 @@
             padding: 0 24px calc(36px + env(safe-area-inset-bottom, 0px));
         }
 
-        /* ---------- Motion: one quick entrance, one soft reveal ---------- */
+        /* ---------- Motion: fast entrance (buttons first), one soft reveal ---------- */
         @keyframes rise {
-            from { opacity: 0; transform: translateY(14px); }
+            from { opacity: 0; transform: translateY(12px); }
             to   { opacity: 1; transform: none; }
         }
 
-        .hero > * {
-            animation: rise 0.5s ease-out backwards;
-            animation-delay: calc(var(--i, 0) * 70ms);
+        .rise {
+            animation: rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+            animation-delay: calc(var(--d, 0) * 60ms);
         }
 
         .js .reveal {
@@ -166,34 +339,60 @@
         }
 
         @media (max-width: 480px) {
-            .links { gap: 10px; margin-top: 26px; }
+            .links { gap: 10px; }
             .links a { padding: 10px 20px; font-size: 0.9rem; }
             .email { font-size: 0.88rem; }
         }
 
         @media (prefers-reduced-motion: reduce) {
             html { scroll-behavior: auto; }
-            .hero > * { animation: none; }
+            .rise { animation: none; }
+            .hero::before { animation: none; }
+            .hero-bg { transition: none; transform: none; }
             .js .reveal { opacity: 1; transform: none; transition: none; }
-            .links a { transition: none; }
+            .links a, .info-btn, .note-link { transition: none; }
+            .note-card { transition: none; }
         }
     </style>
 </head>
 <body>
     <header class="hero">
-        <h1 style="--i:0">Nayem Hasan</h1>
-        <p class="country" style="--i:1">Bangladesh</p>
-        <nav class="links" style="--i:2" aria-label="Social links">
+        <div class="hero-bg" aria-hidden="true"></div>
+
+        <div class="top-actions rise" style="--d:3">
+            <button class="info-btn" id="info-btn" type="button" aria-label="About" aria-expanded="false" aria-controls="note-card">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+                    <path d="M12 10.8v6"/>
+                    <circle cx="12" cy="7.3" r="1" fill="currentColor" stroke="none"/>
+                </svg>
+            </button>
+
+            <div class="note-card" id="note-card" role="dialog" aria-label="A few notes">
+                <p class="note-title">A few random things</p>
+                <ul>
+                    <li>Listen, I am the politest person you have ever seen, so just to prove me wrong don’t bother me.</li>
+                    <li>I love people, but toxicity nite pari na, so never be, okay?</li>
+                    <li>Ekhon porjonto to single e, uh, majhe majhe tuktak irony kore nei but trust ne apatoto temon kono plan nei and I'm happy with it.</li>
+                    <li>And simply, approach korle, there is a high chance I will hurt you, and I don’t want it to happen, so just don’t.</li>
+                    <li>I didn't want to say like that but saying a thing again and again feels not good. </li>
+                </ul>
+                <a class="note-link" href="https://i.nayem.net/">Notes </a>
+            </div>
+        </div>
+
+        <h1 class="rise" style="--d:1">Nayem Hasan</h1>
+        <p class="country rise" style="--d:2">From Bangladesh</p>
+        <nav class="links rise" style="--d:0" aria-label="Social links">
             <a href="https://facebook.com/n4y3mz" target="_blank" rel="noopener noreferrer">Facebook</a>
             <a href="https://instagram.com/n4y3mz" target="_blank" rel="noopener noreferrer">Instagram</a>
             <a href="https://wa.me/@n4y3m" target="_blank" rel="noopener noreferrer">WhatsApp</a>
         </nav>
-        <a class="email" style="--i:3" href="mailto:n4y3mz@gmail.com">n4y3mz@gmail.com</a>
+        <a class="email rise" style="--d:3" href="mailto:info@nayem.net">info@nayem.net</a>
     </header>
 
     <main class="quote">
         <p class="reveal">With great power comes great responsibility</p>
-        <small class="reveal">I would like it, if you never try to judge</small>
+        <small class="reveal">I don’t chase greatness. I’m what it chases.</small>
     </main>
 
     <footer>&copy; 2026 Nayem Hasan</footer>
@@ -219,6 +418,30 @@
   items.forEach(function (el) { io.observe(el); });
 })();
 
+/* Floating note */
+(function () {
+  var btn = document.getElementById('info-btn');
+  var card = document.getElementById('note-card');
+  if (!btn || !card) return;
+
+  function setOpen(open) {
+    card.classList.toggle('open', open);
+    btn.classList.toggle('active', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+
+  btn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    setOpen(!card.classList.contains('open'));
+  });
+  document.addEventListener('click', function (e) {
+    if (!card.contains(e.target)) setOpen(false);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && card.classList.contains('open')) { setOpen(false); btn.focus(); }
+  });
+})();
+
 /* Gentle snowfall */
 (function () {
   var canvas = document.getElementById('snow');
@@ -229,14 +452,26 @@
   }
 
   var ctx = canvas.getContext('2d');
-  var w = 0, h = 0, flakes = [], raf = 0, last = 0, timer = 0;
+  var w = 0, h = 0, flakes = [], bigs = [], raf = 0, last = 0, timer = 0, op = 1;
 
-  function make(randomY) {
-    var r = 1.1 + Math.random() * 2.3;
+  /* Opacity: 1 at the top of the page, fading to 0 by 80% of the page scroll */
+  function updateFade() {
+    var scrollable = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+    var p = Math.min(Math.max((window.pageYOffset || 0) / scrollable, 0), 1);
+    op = Math.max(0, 1 - p / 0.8);
+    canvas.style.opacity = op;
+    if (op > 0 && !raf && !document.hidden) start();
+  }
+
+  /* big = the few extra flakes of random size (3 to 9px radius) */
+  function make(randomY, big) {
+    var r = big ? 3 + Math.random() * 6 : 1.1 + Math.random() * 2.3;
     var x = Math.random() * w;
-    return { x0: x, x: x, y: randomY ? Math.random() * h : -10, r: r,
-             v: 20 + r * 13, amp: 6 + Math.random() * 14,
-             freq: 0.6 + Math.random() * 0.9, ph: Math.random() * 6.28, t: 0 };
+    return { x0: x, x: x, y: randomY ? Math.random() * h : -r * 2 - 10, r: r,
+             v: big ? 26 + r * 8 : 20 + r * 13,
+             amp: big ? 14 + Math.random() * 26 : 6 + Math.random() * 14,
+             freq: 0.5 + Math.random() * 0.8, ph: Math.random() * 6.28, t: 0,
+             a: big ? 0.55 + Math.random() * 0.35 : 1 };
   }
 
   function resize() {
@@ -249,26 +484,37 @@
     var n = Math.round(Math.min(70, Math.max(28, w / 18)));
     while (flakes.length < n) flakes.push(make(true));
     flakes.length = n;
+    /* 4 or 5 extra random-size flakes on screen at a time */
+    var nb = 4 + Math.round(Math.random());
+    while (bigs.length < nb) bigs.push(make(true, true));
+    bigs.length = nb;
   }
 
   function frame(now) {
     var dt = Math.min((now - last) / 1000, 0.05);
     last = now;
     ctx.clearRect(0, 0, w, h);
+    if (op <= 0) { raf = 0; return; }
     ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
     ctx.strokeStyle = 'rgba(110, 135, 170, 0.45)';
     ctx.lineWidth = 0.8;
-    for (var i = 0; i < flakes.length; i++) {
-      var f = flakes[i];
+    var all = flakes.concat(bigs);
+    for (var i = 0; i < all.length; i++) {
+      var f = all[i];
       f.t += dt;
       f.y += f.v * dt;
       f.x = f.x0 + Math.sin(f.t * f.freq + f.ph) * f.amp;
-      if (f.y > h + 10) { f.y = -10; f.x0 = Math.random() * w; }
+      if (f.y > h + f.r + 10) {
+        if (f.a < 1) { Object.assign(f, make(false, true)); }
+        else { f.y = -10; f.x0 = Math.random() * w; }
+      }
+      ctx.globalAlpha = f.a;
       ctx.beginPath();
       ctx.arc(f.x, f.y, f.r, 0, 6.2832);
       ctx.fill();
       ctx.stroke();
     }
+    ctx.globalAlpha = 1;
     raf = requestAnimationFrame(frame);
   }
 
@@ -276,9 +522,11 @@
   function stop() { cancelAnimationFrame(raf); raf = 0; }
 
   resize();
+  updateFade();
   start();
-  window.addEventListener('resize', function () { clearTimeout(timer); timer = setTimeout(resize, 150); });
-  document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else start(); });
+  window.addEventListener('scroll', updateFade, { passive: true });
+  window.addEventListener('resize', function () { clearTimeout(timer); timer = setTimeout(function () { resize(); updateFade(); }, 150); });
+  document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else if (op > 0) start(); });
 })();
 </script>
 </body>
