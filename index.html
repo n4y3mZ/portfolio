@@ -481,11 +481,11 @@
     canvas.width = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    var n = Math.round(Math.min(70, Math.max(28, w / 18)));
+    var n = Math.round(Math.min(90, Math.max(28, w / 18)));
     while (flakes.length < n) flakes.push(make(true));
     flakes.length = n;
     /* 4 or 5 extra random-size flakes on screen at a time */
-    var nb = 4 + Math.round(Math.random());
+    var nb = 6 + Math.round(Math.random());
     while (bigs.length < nb) bigs.push(make(true, true));
     bigs.length = nb;
   }
